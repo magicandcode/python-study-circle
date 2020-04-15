@@ -1,6 +1,6 @@
 # Hangman's Game
 
-### Starting code for meetup #1 April 15 2020
+### Starter code for Python Study Circle meetup #1 April 15 2020
 
 Set up a virtual environment to run the project code.
 
