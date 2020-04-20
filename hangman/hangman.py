@@ -72,7 +72,7 @@ def game(words: List[str], game_count: int):
         # If guess is correct, replace empty slots with correct guess in
         #   result and result_chars and display message.
         print("correct")
-        break
+
       else:
         # If guess is wrong, increment guess_count and display message.
         guess_count += 1
