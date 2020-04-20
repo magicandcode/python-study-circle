@@ -54,6 +54,52 @@ def get_game_solution(words: List[str]):
     return solution
 
 
+def guess_is_valid(guess: str) -> bool:
+    """Checks if guess is valid.
+    
+    Not the same as guess being correct.
+    A guess can be a lower or upper case string with a letter A-Za-z.
+    Normalise guess by converting to lower case and check if its ASCII
+      number is in the range of 97-122 (a-z).
+    Any string with more than one character will throw an exception
+      that is caught and returns False.
+    """
+    try:
+        return 97 <= ord(guess.lower()) <= 122
+    except (AttributeError, TypeError):
+        return False
+
+
+def get_valid_guess() -> str:
+    """Get valid guess, reprompting player until guess is valid.
+
+    Note that validity is not same as guess being correct and present
+      in the solution string.
+    """
+    guess: str = input('Guess a letter A-Z: ').upper()
+    if not guess_is_valid(guess):
+        print(f'Invalid guess: {guess}, please try again.')
+        guess = get_valid_guess()
+    return guess
+
+
+def guess_is_correct(guess: str, solution: str) -> bool:
+    """Check if guess is in solution string."""
+    return guess.upper() in solution.upper()
+
+
+def player_wins(result: str, solution: str) -> bool:
+    """Check if player wins by comparing result with solution."""
+    return result == solution
+
+
+def player_loses(guess_count: int, max_guess_count: int = 5) -> bool:
+    """Check if player loses; the number of incorrect guesses is
+      greater than the max number allowed guesses.
+    """
+    return guess_count > max_guess_count
+
+
 def play(game: Callable[[Any], None], *args, **kwargs):
     """Start new game session and loop game until user quits.
     
@@ -88,7 +134,7 @@ def play(game: Callable[[Any], None], *args, **kwargs):
 
         # Else quit the game session by breaking out of the loop and returning to
         #   the console prompt.
-        print("Thank's for playing, bye!")
+        print("\nThank's for playing, bye!")
         break
 
 
@@ -102,3 +148,7 @@ initial_game_state: Dict[str, Any] = {
     'win': None,
     'loss': None,  
 }
+
+
+if __name__ == '__main__':
+    pass
