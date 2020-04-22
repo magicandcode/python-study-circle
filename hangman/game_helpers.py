@@ -26,13 +26,13 @@ def get_words(word_count: Optional[int] = None,
         # Remove duplicate words.
         normalised_words = list(set(normalised_words))
 
-        # Randomise words before slicing.
-        random.shuffle(normalised_words)
-        
         # If word_count is not set, return all words.
         if word_count is None:
             return sorted(normalised_words)
 
+        # Randomise words before slicing.
+        random.shuffle(normalised_words)
+        
         # Sort after slicing; we want randomised words in our slice.
         return sorted(normalised_words[:word_count])
     except FileNotFoundError:
@@ -65,7 +65,7 @@ def guess_is_valid(guess: str) -> bool:
       that is caught and returns False.
     """
     try:
-        return 97 <= ord(guess.lower()) <= 122
+        return 65 <= ord(guess.upper()) <= 90
     except (AttributeError, TypeError):
         return False
 

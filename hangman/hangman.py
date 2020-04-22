@@ -6,6 +6,7 @@ from game_helpers import (get_words,
                           get_valid_guess,
                           play,
                           player_wins,
+                          guess_is_correct
                          )
 
 
@@ -31,8 +32,8 @@ def game(words: List[str], game_count: int):
     print(f'\nStarting Game #{game_count}')
 
     # Initial game settings.
-    MAX_GUESS_COUNT: int = 5
-    guess_count: int = 0
+    MAX_guesses_remaining: int = 5
+    guesses_remaining: int = 5
 
     # Get a solution to match player's guesses against.
     solution: str = get_game_solution(words)
@@ -52,30 +53,40 @@ def game(words: List[str], game_count: int):
     result: str = ''.join(result_chars)
 
 
+    print(solution)
+    # Greeet player with initial result.
+    print(f"Your word:\n\n{' '.join(result)} ({len(solution)} characters)\n")
+
     # Loop game until player wins or loses.
     # We exit the loop when the player wins, or when the number of
     #   (incorrect) guesses is greater than the max number of guesses.
     # Alternatively, we can run the game loop infintely as long as we
     #   break out of it when the player wins or loses.
-    # We can also set guess_count to 5 and decrement with each
-    #   incorrect guess.  That gives us the more explicit expression:
-    #       while guesses_remaining:
-    # Once guesses_remaining equals 0 the expression is False and we
-    #   exit the loop.
-    while guess_count <= MAX_GUESS_COUNT:
+    while guesses_remaining:
       # Ask user to guess a letter.  Validate guess.  Reprompt player
       #   until guess is valid.
       guess: str = get_valid_guess()
 
       # Check if guess is a character in the solution.
-      if guess in solution:
+      if guess_is_correct(guess, solution):
         # If guess is correct, replace empty slots with correct guess in
         #   result and result_chars and display message.
-        print("correct")
+
+        for i, char in enumerate(solution):
+            if char == guess:
+                result_chars[i] = guess
+
+        result = ''.join(result_chars)
+        # Compare result to solution.
+        if player_wins(result, solution):
+            print("")
+            break
+        print(f'{guess} is correct!')
+        print(' '.join(result_chars))
 
       else:
-        # If guess is wrong, increment guess_count and display message.
-        guess_count += 1
+        # If guess is wrong, increment guesses_remaining and display message.
+        guesses_remaining -= 1
         print("incorrect")
 
       # Has player won or lost?
